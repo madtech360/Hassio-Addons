@@ -10,7 +10,7 @@ ARG OMADA_VER=5.3.1
 ARG OMADA_TAR="Omada_SDN_Controller_v${OMADA_VER}_Linux_x64.tar.gz"
 ARG OMADA_URL="https://static.tp-link.com/upload/software/2022/202205/20220507/${OMADA_TAR}"
 # valid values: amd64 (default) | arm64 | armv7l
-ARG ARCH=amd64
+ARG ARCH=arm64
 
 COPY install.sh healthcheck.sh entrypoint.sh /
 
