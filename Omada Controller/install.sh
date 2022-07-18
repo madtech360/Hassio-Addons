@@ -5,7 +5,7 @@ set -e
 # omada controller dependency and package installer script for versions 4.x and 5.x
 
 # set default variables
-OMADA_DIR="/opt/tplink/EAPController"
+OMADA_DIR="/data/tplink/EAPController"
 ARCH="${ARCH:-}"
 OMADA_VER="${OMADA_VER:-}"
 OMADA_TAR="${OMADA_TAR:-}"
@@ -142,10 +142,10 @@ chmod 755 "${OMADA_DIR}"/bin/*
 mkdir "${OMADA_DIR}/logs" "${OMADA_DIR}/work"
 
 # for v5.1 & above, create backup of data/html directory in case it is missing (to be extracted at runtime)
-if [ -d /opt/tplink/EAPController/data/html ]
+if [ -d /data/tplink/EAPController/data/html ]
 then
   # create backup
-  cd /opt/tplink/EAPController/data
+  cd /data/tplink/EAPController/data
   tar zcvf ../data-html.tar.gz html
 fi
 
