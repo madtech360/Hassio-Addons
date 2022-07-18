@@ -65,11 +65,11 @@ else
     # user ID exists but has a different user name
     EXISTING_USER="$(grep ":${PUID}:" /etc/passwd | awk -F ':' '{print $1}')"
     echo "INFO: User (omada) already exists with a different name; renaming '${EXISTING_USER}' to 'omada'"
-    usermod -g "${PGID}" -d /opt/tplink/EAPController/work -l omada -s /bin/sh -c "" "${EXISTING_USER}"
+    usermod -g "${PGID}" -d /data/tplink/EAPController/work -l omada -s /bin/sh -c "" "${EXISTING_USER}"
   else
     # create the user
     echo "INFO: User (omada) doesn't exist; creating"
-    useradd -u "${PUID}" -g "${PGID}" -d /opt/tplink/EAPController/work -s /bin/sh -c "" omada
+    useradd -u "${PUID}" -g "${PGID}" -d /data/tplink/EAPController/work -s /bin/sh -c "" omada
   fi
 fi
 
@@ -92,7 +92,7 @@ set_port_property() {
   fi
 
   echo "INFO: Setting '${1}' to ${3} in omada.properties"
-  sed -i "s/^${1}=${2}$/${1}=${3}/g" /opt/tplink/EAPController/properties/omada.properties
+  sed -i "s/^${1}=${2}$/${1}=${3}/g" /data/tplink/EAPController/properties/omada.properties
 }
 
 # replace MANAGE_HTTP_PORT if not the default
@@ -120,34 +120,34 @@ then
 fi
 
 # make sure that the html directory exists
-if [ ! -d "/opt/tplink/EAPController/data/html" ] && [ -f "/opt/tplink/EAPController/data-html.tar.gz" ]
+if [ ! -d "/data/tplink/EAPController/data/html" ] && [ -f "/data/tplink/EAPController/data-html.tar.gz" ]
 then
   # missing directory; extract from original
-  echo "INFO: Report HTML directory missing; extracting backup to '/opt/tplink/EAPController/data/html'"
-  tar zxvf /opt/tplink/EAPController/data-html.tar.gz -C /opt/tplink/EAPController/data
-  chown -R omada:omada /opt/tplink/EAPController/data/html
+  echo "INFO: Report HTML directory missing; extracting backup to '/data/tplink/EAPController/data/html'"
+  tar zxvf /data/tplink/EAPController/data-html.tar.gz -C /data/tplink/EAPController/data
+  chown -R omada:omada /data/tplink/EAPController/data/html
 fi
 
 # make sure that the pdf directory exists
-if [ ! -d "/opt/tplink/EAPController/data/pdf" ]
+if [ ! -d "/data/tplink/EAPController/data/pdf" ]
 then
   # missing directory; extract from original
-  echo "INFO: Report PDF directory missing; creating '/opt/tplink/EAPController/data/pdf'"
-  mkdir /opt/tplink/EAPController/data/pdf
-  chown -R omada:omada /opt/tplink/EAPController/data/pdf
+  echo "INFO: Report PDF directory missing; creating '/data/tplink/EAPController/data/pdf'"
+  mkdir /data/tplink/EAPController/data/pdf
+  chown -R omada:omada /data/tplink/EAPController/data/pdf
 fi
 
 # make sure permissions are set appropriately on each directory
 for DIR in data logs work
 do
-  OWNER="$(stat -c '%u' /opt/tplink/EAPController/${DIR})"
-  GROUP="$(stat -c '%g' /opt/tplink/EAPController/${DIR})"
+  OWNER="$(stat -c '%u' /data/tplink/EAPController/${DIR})"
+  GROUP="$(stat -c '%g' /data/tplink/EAPController/${DIR})"
 
   if [ "${OWNER}" != "${PUID}" ] || [ "${GROUP}" != "${PGID}" ]
   then
     # notify user that uid:gid are not correct and fix them
-    echo "WARN: ownership not set correctly on '/opt/tplink/EAPController/${DIR}'; setting correct ownership (omada:omada)"
-    chown -R omada:omada "/opt/tplink/EAPController/${DIR}"
+    echo "WARN: ownership not set correctly on '/data/tplink/EAPController/${DIR}'; setting correct ownership (omada:omada)"
+    chown -R omada:omada "/data/tplink/EAPController/${DIR}"
   fi
 done
 
@@ -160,11 +160,11 @@ then
 fi
 
 # check to see if there is a db directory; create it if it is missing
-if [ ! -d "/opt/tplink/EAPController/data/db" ]
+if [ ! -d "/data/tplink/EAPController/data/db" ]
 then
-  echo "INFO: Database directory missing; creating '/opt/tplink/EAPController/data/db'"
-  mkdir /opt/tplink/EAPController/data/db
-  chown omada:omada /opt/tplink/EAPController/data/db
+  echo "INFO: Database directory missing; creating '/data/tplink/EAPController/data/db'"
+  mkdir /data/tplink/EAPController/data/db
+  chown omada:omada /data/tplink/EAPController/data/db
   echo "done"
 fi
 
@@ -172,13 +172,13 @@ fi
 if [ -f "/cert/${SSL_KEY_NAME}" ] && [ -f "/cert/${SSL_CERT_NAME}" ]
 then
   # see where the keystore directory is; check for old location first
-  if [ -d /opt/tplink/EAPController/keystore ]
+  if [ -d /data/tplink/EAPController/keystore ]
   then
     # keystore in the parent folder before 5.3.1
-    KEYSTORE_DIR="/opt/tplink/EAPController/keystore"
+    KEYSTORE_DIR="/data/tplink/EAPController/keystore"
   else
     # keystore directory moved to the data directory in 5.3.1
-    KEYSTORE_DIR="/opt/tplink/EAPController/data/keystore"
+    KEYSTORE_DIR="/data/tplink/EAPController/data/keystore"
 
     # check to see if the KEYSTORE_DIR exists (it won't on upgrade)
     if [ ! -d "${KEYSTORE_DIR}" ]
@@ -216,9 +216,9 @@ then
 fi
 
 # see if any of these files exist; if so, do not start as they are from older versions
-if [ -f /opt/tplink/EAPController/data/db/tpeap.0 ] || [ -f /opt/tplink/EAPController/data/db/tpeap.1 ] || [ -f /opt/tplink/EAPController/data/db/tpeap.ns ]
+if [ -f /data/tplink/EAPController/data/db/tpeap.0 ] || [ -f /data/tplink/EAPController/data/db/tpeap.1 ] || [ -f /data/tplink/EAPController/data/db/tpeap.ns ]
 then
-  echo "ERROR: the data volume mounted to /opt/tplink/EAPController/data appears to have data from a previous version!"
+  echo "ERROR: the data volume mounted to /data/tplink/EAPController/data appears to have data from a previous version!"
   echo "  Follow the upgrade instructions at https://github.com/mbentley/docker-omada-controller#upgrading-to-41"
   exit 1
 fi
@@ -237,13 +237,13 @@ echo "INFO: Starting Omada Controller as user omada"
 # tail the omada logs if set to true
 if [ "${SHOW_SERVER_LOGS}" = "true" ]
 then
-  gosu omada tail -F -n 0 /opt/tplink/EAPController/logs/server.log &
+  gosu omada tail -F -n 0 /data/tplink/EAPController/logs/server.log &
 fi
 
 # tail the mongodb logs if set to true
 if [ "${SHOW_MONGODB_LOGS}" = "true" ]
 then
-  gosu omada tail -F -n 0 /opt/tplink/EAPController/logs/mongod.log &
+  gosu omada tail -F -n 0 /data/tplink/EAPController/logs/mongod.log &
 fi
 
 # run the actual command as the omada user
