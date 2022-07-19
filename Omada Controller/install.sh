@@ -5,7 +5,7 @@ set -e
 # omada controller dependency and package installer script for versions 4.x and 5.x
 
 # set default variables
-OMADA_DIR="/opt/tplink/EAPController"
+OMADA_DIR="/data/tplink/EAPController"
 ARCH="${ARCH:-}"
 OMADA_VER="${OMADA_VER:-}"
 OMADA_TAR="${OMADA_TAR:-}"
