@@ -10,7 +10,9 @@ ARG OMADA_URL="https://static.tp-link.com/upload/software/2022/202205/20220507/$
 # valid values: amd64 (default) | arm64 | armv7l
 ARG ARCH=arm64
 
-COPY install.sh healthcheck.sh /
+COPY install.sh healthcheck.sh entrypoint.sh /
+
+RUN chmod +x /*.sh
 
 # install omada controller (instructions taken from install.sh); then create a user & group and set the appropriate file system permissions
 RUN /install.sh && rm /install.sh
@@ -20,8 +22,6 @@ RUN /install.sh && rm /install.sh
 #RUN /log4j_patch.sh
 
 COPY log4j2.properties /opt/tplink/EAPController/properties/
-
-COPY entrypoint-5.x.sh /entrypoint.sh
 
 WORKDIR /opt/tplink/EAPController/lib
 EXPOSE 8088 8043 8843 29810/udp 29811 29812 29813 29814
