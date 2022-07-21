@@ -6,7 +6,6 @@ set -e
 
 # set default variables
 OMADA_DIR="/opt/tplink/EAPController"
-OMADA_DIR_DATA="/data/tplink/EAPController"
 ARCH="${ARCH:-}"
 OMADA_VER="${OMADA_VER:-}"
 OMADA_TAR="${OMADA_TAR:-}"
@@ -140,13 +139,13 @@ ln -sf "$(which mongod)" "${OMADA_DIR}/bin/mongod"
 chmod 755 "${OMADA_DIR}"/bin/*
 
 # create logs and work directories
-mkdir "${OMADA_DIR_DATA}/logs" "${OMADA_DIR_DATA}/work"
+mkdir "${OMADA_DIR}/logs" "${OMADA_DIR}/work"
 
 # for v5.1 & above, create backup of data/html directory in case it is missing (to be extracted at runtime)
-if [ -d /data/tplink/EAPController/data/html ]
+if [ -d /opt/tplink/EAPController/data/html ]
 then
   # create backup
-  cd /data/tplink/EAPController/data
+  cd /opt/tplink/EAPController/data
   tar zcvf ../data-html.tar.gz html
 fi
 
