@@ -23,6 +23,7 @@ PKGS=(
   net-tools
   tzdata
   wget
+  vim
 )
 
 # add specific package for mongodb

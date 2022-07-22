@@ -162,7 +162,7 @@ then
 fi
 
 # make sure permissions are set appropriately on each directory
-for DIR in logs work
+for DIR in logs work data
 do
   OWNER="$(stat -c '%u' /opt/tplink/EAPController/${DIR})"
   GROUP="$(stat -c '%g' /opt/tplink/EAPController/${DIR})"
