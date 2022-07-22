@@ -123,6 +123,8 @@ fi
 if [ ! -d "/data/tplink/EAPController/data" ]
 then
   echo "INFO: Database directory missing; creating '/data/tplink/EAPController/data/'"
+  mkdir /data/tplink
+  mkdir /data/tplink/EAPController
   mkdir /data/tplink/EAPController/data
   chown omada:omada /data/tplink/EAPController/data
   echo "done"
