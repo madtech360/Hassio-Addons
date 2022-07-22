@@ -1,8 +1,7 @@
 # rebased/repackaged base image that only updates existing packages
-#ARG BASE=mbentley/ubuntu:20.04
-#FROM ${BASE}
-ARG BUILD_FROM
-FROM $BUILD_FROM
+ARG BASE=mbentley/ubuntu:20.04
+FROM ${BASE}
+
 
 LABEL maintainer="Matt Bentley <mbentley@mbentley.net>"
 
